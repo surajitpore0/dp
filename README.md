@@ -106,28 +106,28 @@ int main(){
 using namespace std;
 
 
-bool isSubsetSum(int arr[], int n, int sum) {
-    bool dp[n + 1][sum + 1];
+bool isSubsetSum(vector<int>& arr, int n, int sum) {
+        bool dp[n + 1][sum + 1];
 
-    for (int i = 0; i <= n; i++) {
-        for (int j = 0; j <= sum; j++) {
-            if (i == 0)
-                dp[i][j] = true;
-            if (j == 0)
-                dp[i][j] = false;
+        for (int i = 0; i <= n; i++) {
+            for (int j = 0; j <= sum; j++) {
+                if (i == 0)
+                    dp[i][j] = false;
+                if (j == 0)
+                    dp[i][j] = true;
+            }
         }
-    }
 
-    for (int i = 1; i <= n; i++) {
-        for (int j = 1; j <= sum; j++) {
-            if (arr[i] <= j)
-                dp[i][j] = dp[i][j - arr[i - 1]] || dp[i - 1][j];
-            else
-                dp[i][j] = dp[i - 1][j];
+        for (int i = 1; i <= n; i++) {
+            for (int j = 1; j <= sum; j++) {
+                if (arr[i-1] <= j)
+                    dp[i][j] = dp[i-1][j - arr[i - 1]] || dp[i - 1][j];
+                else
+                    dp[i][j] = dp[i - 1][j];
+            }
         }
+        return dp[n][sum];
     }
-    return dp[n][sum];
-}
 
 int main()
 {   freopen("input.txt", "r", stdin);
@@ -143,4 +143,112 @@ int main()
         printf("No subset with given sum");
     return 0;
 }
+```
+
+## 5. Equal Sum Partition:
+
+```c++
+#include <bits/stdc++.h>
+using namespace std;
+
+
+bool isSubsetSum(vector<int>& arr, int n, int sum) {
+        bool dp[n + 1][sum + 1];
+
+        for (int i = 0; i <= n; i++) {
+            for (int j = 0; j <= sum; j++) {
+                if (i == 0)
+                    dp[i][j] = false;
+                if (j == 0)
+                    dp[i][j] = true;
+            }
+        }
+
+        for (int i = 1; i <= n; i++) {
+            for (int j = 1; j <= sum; j++) {
+                if (arr[i-1] <= j)
+                    dp[i][j] = dp[i-1][j - arr[i - 1]] || dp[i - 1][j];
+                else
+                    dp[i][j] = dp[i - 1][j];
+            }
+        }
+        return dp[n][sum];
+    }
+
+
+bool findPartiion(int arr[], int n) {
+    int sum = 0;
+    for (int i = 0; i < n; i++)
+        sum += arr[i];
+
+    if (sum % 2 != 0)
+        return false;
+
+    if (isSubsetSum(arr, n, sum / 2))
+        return true;
+    return false;
+}
+
+
+int main()
+{   
+    freopen("input.txt", "r", stdin);
+    freopen("output.txt", "w", stdout);
+
+    int arr[] = { 3, 1, 5, 9, 12 };
+    int n = sizeof(arr) / sizeof(arr[0]);
+
+    if (findPartiion(arr, n) == true)
+        cout << "YES";
+    else
+        cout << "NO";
+    return 0;
+}
+
+```
+
+## 6. Count of Subsets Sum with a Given Sum :
+
+```c++
+#include <bits/stdc++.h>
+using namespace std;
+
+
+int findCnt(int arr[], int n, int sum) {
+    int dp[n + 1][sum + 1];
+
+    for (int i = 0; i <= n; i++) {
+        for (int j = 0; j <= sum; j++) {
+            if (i == 0)
+                dp[i][j] = 0;
+            if (j == 0)
+                dp[i][j] = 1;
+        }
+    }
+
+    for (int i = 1; i <= n; i++) {
+        for (int j = 1; j <= sum; j++) {
+            if (arr[i - 1] <= j)
+                dp[i][j] = dp[i - 1][j - arr[i - 1]] + dp[i - 1][j];
+            else
+                dp[i][j] = dp[i - 1][j];
+        }
+    }
+    return dp[n][sum];
+}
+
+
+int main()
+{
+    freopen("input.txt", "r", stdin);
+    freopen("output.txt", "w", stdout);
+
+    int arr[] = { 3, 3, 3, 3 };
+    int n = 4;
+    int sum = 6;
+
+    cout << findCnt(arr, n, sum);
+    return 0;
+}
+
 ```
