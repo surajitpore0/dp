@@ -1,8 +1,8 @@
 # Dynamic Programming
 
 
-> 01 Knapsack Recursive
-```
+> 01 Knapsack Recursive 
+```c++
     
 int knapSack(int w, int wt[], int val[], int n) {
     if (w == 0 || n == 0)
